@@ -28,8 +28,10 @@ app.use('/css', express.static(__dirname + 'public/css'))
 app.use('/js', express.static(__dirname + 'public/js')) //if we'll add
 app.use('/img', express.static(__dirname + 'public/images'))
 
-console.log("Nya ichi")
+
 
 const server = app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+console.log("This is my branch~")
+
