@@ -1,0 +1,141 @@
+<%-include('header')-%>
+<html>
+<head>
+    <title>Affirmation Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+
+    <style>
+        body {
+            font-family: "Raleway", sans-serif;
+            color: white;
+            background-color: #0074D9;
+        }
+
+        main {
+            margin: 0 auto;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .affirmation-container {
+            box-sizing: border-box;
+            padding: 15px;
+            margin: 10px;
+            font-size: 24px;
+            border-radius: 5px;
+            background-color: white;
+            text-align: center;
+        }
+        .alertsPanel h2 {
+            padding: 5px;
+            background-color: red;
+            color: white;
+        }
+
+        section button, section a {
+            text-align: center;
+            color: white;
+            border: none;
+            font-size: 18px;
+            text-decoration: none;
+            font-family: "Raleway", sans-serif;
+            padding: 10px 25px 10px 25px;
+            outline: none;
+            margin: 5px;
+        }
+        section p {
+
+        }
+
+        footer {
+
+        }
+
+    </style>
+</head>
+<body>
+<h1>Ron Swanson Quote Generator</h1>
+<p>(4 ways of writing AJAX requests)</p>
+<section class="container">
+    <button id="xhr">XHR</button>
+    <button id="fetch">Fetch</button>
+    <button id="jquery">jQuery</button>
+    <button id="axios">Axios</button>
+</section>
+
+
+<p id="quote">Quote Goes Here...</p>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var url = 'https://ron-swanson-quotes.herokuapp.com/v2/quotes';
+
+    // XHR
+    var XHR = new XMLHttpRequest();
+
+    // select xhr button
+    $("#xhr").click(function() {
+        XHR.onreadystatechange = function() {
+            if(XHR.readyState == 4 && XHR.status == 200) {
+                $("#quote").text(JSON.parse(XHR.response));
+            }
+        }
+
+        XHR.open("GET", url);
+        XHR.send();
+    });
+
+
+
+    // Fetch
+    // event listener
+    $("#fetch").click(function() {
+        fetch(url).then(handleErrors)
+            .then(parseJSON)
+            .then(function(data) {
+                $("#quote").text(data);
+            })
+            .catch(function(err) {
+                console.log(err);
+            })
+    });
+
+    function handleErrors(response) {
+        if(!response.ok) {
+            console.log(response.status);
+        }
+        return response;
+    }
+
+    function parseJSON(response) {
+        // parse to JSON
+        return response.json().then(function(data) {
+            return data[0];
+        });
+    }
+
+
+    //jQuery
+    $("#jquery").click(function() {
+        $.getJSON(url).done(function(data) {
+            $("#quote").text(data[0]);
+        }). fail(function(err) {
+            console.log(err.statusText);
+        })
+    });
+
+
+    //axios
+    $("#axios").click(function() {
+        axios.get(url).then(function(data) {
+            $("#quote").text(data.data[0]);
+        }).catch(function(err) {
+            console.log(err);
+        })
+    });
+   </script>
+</body>
+</html>
